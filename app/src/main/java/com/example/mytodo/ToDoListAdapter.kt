@@ -37,6 +37,10 @@ class ToDoListAdapter : androidx.recyclerview.widget.ListAdapter<ToDo, ToDoListA
             }
         }
 
+        fun removeItem(position: Int) {
+
+        }
+
     }
 
 class ToDoComparator : DiffUtil.ItemCallback<ToDo>(){

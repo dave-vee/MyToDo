@@ -1,9 +1,6 @@
 package com.example.mytodo.room
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.*
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -16,4 +13,7 @@ interface MyDao {
 
     @Query("DELETE FROM table_toDo")
     fun deleteAll()
+
+    @Delete
+    suspend fun deleteToDo(todo: ToDo)
 }

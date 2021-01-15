@@ -30,13 +30,13 @@ abstract class ToDoRoomDatabase : RoomDatabase() {
                     toDoDao.deleteAll()
 
                     // Add sample words.
-                    var todo = ToDo("Go to Paris",false)
+                    var todo = ToDo("Go to Paris",1)
                     toDoDao.insert(todo)
-                    todo = ToDo("Go to Beijing ", true)
+                    todo = ToDo("Go to Beijing ", 0)
                     toDoDao.insert(todo)
-                    todo = ToDo("Go to Nairobi ", true)
+                    todo = ToDo("Go to Nairobi ", 1)
                     toDoDao.insert(todo)
-                    todo = ToDo("Go to Mombasa ", true)
+                    todo = ToDo("Go to Mombasa ", 0)
                     toDoDao.insert(todo)
                 }
             }

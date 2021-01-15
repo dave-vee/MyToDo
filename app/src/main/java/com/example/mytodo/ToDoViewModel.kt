@@ -3,6 +3,7 @@ package com.example.mytodo
 import androidx.lifecycle.*
 import com.example.mytodo.room.ToDo
 import com.example.mytodo.room.ToDoRepository
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class ToDoViewModel(private val repo :ToDoRepository) :ViewModel() {
@@ -12,6 +13,15 @@ class ToDoViewModel(private val repo :ToDoRepository) :ViewModel() {
 
     fun insert (toDo: ToDo) = viewModelScope.launch {
         repo.insert(toDo)
+    }
+
+
+    fun deleteAllToDos() = viewModelScope.launch(Dispatchers.IO) {
+        repo.deleteAll()
+    }
+
+    fun deleteToDo(toDo: ToDo) = viewModelScope.launch {
+        repo.deleteToDo(toDo)
     }
 
 }

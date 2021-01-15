@@ -2,21 +2,27 @@ package com.example.mytodo
 
 
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mytodo.room.ToDo
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import java.util.ArrayList
 
 
 class MainActivity : AppCompatActivity() {
 
     private val newWordActivityRequestCode = 1
+
     private val toDoViewModel : ToDoViewModel by viewModels {
         ViewModelFactory((application as ToDoApplication).repository)
     }
@@ -43,6 +49,8 @@ class MainActivity : AppCompatActivity() {
             startActivityForResult(intent, newWordActivityRequestCode)
         }
 
+
+
     }
 
 
@@ -51,16 +59,39 @@ class MainActivity : AppCompatActivity() {
 
         if (requestCode == newWordActivityRequestCode && resultCode == Activity.RESULT_OK) {
             data?.getStringExtra(NewToDoActivity.EXTRA_REPLY)?.let { reply ->
-                val toDo = ToDo(reply, false)
+                val toDo = ToDo(reply, 0)
                 toDoViewModel.insert(toDo)
             }
         } else {
             Toast.makeText(
                 applicationContext,
                 R.string.empty_not_saved,
-                Toast.LENGTH_LONG).show()
+                Toast.LENGTH_LONG
+            ).show()
         }
     }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu,menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId){
+            R.id.close_app -> finish()
+            R.id.delete_all -> AlertDialog.Builder(this)
+                .setPositiveButton("Yes"){_,_ ->
+                    toDoViewModel.deleteAllToDos()
+                }
+                .setNegativeButton("No"){_,_ ->}
+                .setTitle("Delete All Items")
+                .setMessage("Are You Sure You Want to Delete All Items")
+                .create().show()
+
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
 
 
 }

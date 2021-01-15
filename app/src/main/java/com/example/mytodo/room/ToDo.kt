@@ -5,5 +5,5 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "table_toDo")
-class ToDo(@PrimaryKey @ColumnInfo(name = "ToDo") val toDo : String, val isChecked : Boolean ) {
+class ToDo(@PrimaryKey @ColumnInfo(name = "ToDo") val toDo: String, val isChecked: Int) {
 }

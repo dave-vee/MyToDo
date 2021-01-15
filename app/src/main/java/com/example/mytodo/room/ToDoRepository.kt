@@ -12,4 +12,13 @@ class ToDoRepository(private val todoDao : MyDao) {
     @WorkerThread
     suspend fun insert(todo: ToDo) = todoDao.insert(todo)
 
+    fun deleteAll(){
+        todoDao.deleteAll()
+
+    }
+
+    suspend fun deleteToDo(todo: ToDo){
+        todoDao.deleteToDo(todo)
+    }
+
 }
