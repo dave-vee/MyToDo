@@ -16,10 +16,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mytodo.room.ToDo
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import java.util.ArrayList
 
 
 class MainActivity : AppCompatActivity() {
+
+     var todoAdapter = ToDoListAdapter()
 
     private val newWordActivityRequestCode = 1
 
@@ -49,7 +50,8 @@ class MainActivity : AppCompatActivity() {
             startActivityForResult(intent, newWordActivityRequestCode)
         }
 
-
+        val itemTouchHelper = ItemTouchHelper(simpleItemTouchCallback)
+        itemTouchHelper.attachToRecyclerView(recyclerView)
 
     }
 
@@ -72,7 +74,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.menu,menu)
+        menuInflater.inflate(R.menu.menu, menu)
         return super.onCreateOptionsMenu(menu)
     }
 
@@ -80,10 +82,10 @@ class MainActivity : AppCompatActivity() {
         when(item.itemId){
             R.id.close_app -> finish()
             R.id.delete_all -> AlertDialog.Builder(this)
-                .setPositiveButton("Yes"){_,_ ->
+                .setPositiveButton("Yes") { _, _ ->
                     toDoViewModel.deleteAllToDos()
                 }
-                .setNegativeButton("No"){_,_ ->}
+                .setNegativeButton("No") { _, _ -> }
                 .setTitle("Delete All Items")
                 .setMessage("Are You Sure You Want to Delete All Items")
                 .create().show()
@@ -92,6 +94,22 @@ class MainActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
+    var simpleItemTouchCallback: ItemTouchHelper.SimpleCallback =
+        object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder
+            ): Boolean {
+
+                return false // true if moved, false otherwise
+            }
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, swipeDir: Int) {
+                //Remove swiped item from list and notify the RecyclerView
+                todoAdapter.notifyItemRemoved(viewHolder.layoutPosition)
+
+            }
+        }
 
 
 }
