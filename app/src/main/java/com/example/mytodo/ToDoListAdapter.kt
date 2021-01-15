@@ -23,7 +23,7 @@ class ToDoListAdapter : androidx.recyclerview.widget.ListAdapter<ToDo, ToDoListA
     class ToDoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         private val tv_todo: TextView = itemView.findViewById(R.id.tv_toDo)
-        var ischecked: Boolean = itemView.findViewById(R.id.cb_checked)
+
         fun bind(text: String?) {
             tv_todo.text = text
 

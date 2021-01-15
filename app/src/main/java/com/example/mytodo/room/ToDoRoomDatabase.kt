@@ -16,7 +16,7 @@ abstract class ToDoRoomDatabase : RoomDatabase() {
     abstract fun toDoDao() : MyDao
 
 
-    private class WordDatabaseCallback(
+    private class ToDoDatabaseCallback(
         private val scope: CoroutineScope
     ) : RoomDatabase.Callback() {
 
@@ -55,7 +55,9 @@ abstract class ToDoRoomDatabase : RoomDatabase() {
                     context.applicationContext,
                     ToDoRoomDatabase::class.java,
                     "ToDo_Database"
-                ).build()
+
+                ) .addCallback(ToDoDatabaseCallback(scope))
+                    .build()
 
                 INSTANCE = instance
                 // return instance
