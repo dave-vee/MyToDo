@@ -4,5 +4,8 @@
     <string name="hint_word">ToDo…</string>
     <string name="button_save">Save</string>
     <string name="empty_not_saved">ToDo not saved because it is empty.</string>
+    <string name="close_app">Close App</string>
+    <string name="delete_all_items">Delete All Items</string>
+    <string name="settings">Settings</string>
 
 </resources>

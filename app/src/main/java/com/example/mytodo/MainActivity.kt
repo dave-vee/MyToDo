@@ -81,6 +81,7 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId){
             R.id.close_app -> finish()
+            R.id.settings -> gotoPreferencesActivity()
             R.id.delete_all -> AlertDialog.Builder(this)
                 .setPositiveButton("Yes") { _, _ ->
                     toDoViewModel.deleteAllToDos()
@@ -106,10 +107,14 @@ class MainActivity : AppCompatActivity() {
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, swipeDir: Int) {
                 //Remove swiped item from list and notify the RecyclerView
+
                 todoAdapter.notifyItemRemoved(viewHolder.layoutPosition)
 
             }
         }
 
 
+    private  fun gotoPreferencesActivity() {
+        startActivity(Intent(this,PreferencesActivity::class.java))
+    }
 }

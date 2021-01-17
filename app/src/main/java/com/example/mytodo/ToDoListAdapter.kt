@@ -8,14 +8,16 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mytodo.room.ToDo
 
-class ToDoListAdapter : androidx.recyclerview.widget.ListAdapter<ToDo, ToDoListAdapter.ToDoViewHolder>(ToDoComparator()) {
+class ToDoListAdapter : androidx.recyclerview.widget.ListAdapter<ToDo, ToDoListAdapter.ToDoViewHolder>(
+    ToDoComparator()
+) {
 
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ToDoListAdapter.ToDoViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ToDoViewHolder {
         return ToDoViewHolder.create(parent)
     }
 
-    override fun onBindViewHolder(holder: ToDoListAdapter.ToDoViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ToDoViewHolder, position: Int) {
         val current = getItem(position)
         holder.bind(current.toDo)
     }
@@ -37,10 +39,11 @@ class ToDoListAdapter : androidx.recyclerview.widget.ListAdapter<ToDo, ToDoListA
             }
         }
 
+
         fun removeItem(position: Int) {
 
-        }
 
+        }
     }
 
 class ToDoComparator : DiffUtil.ItemCallback<ToDo>(){
