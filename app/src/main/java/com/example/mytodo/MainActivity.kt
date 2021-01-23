@@ -7,6 +7,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -16,12 +17,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mytodo.room.ToDo
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.snackbar.Snackbar
 
 
 class MainActivity : AppCompatActivity() {
 
      var todoAdapter = ToDoListAdapter()
-
+  lateinit var view : View
     private val newWordActivityRequestCode = 1
 
     private val toDoViewModel : ToDoViewModel by viewModels {
@@ -40,7 +42,7 @@ class MainActivity : AppCompatActivity() {
 
         toDoViewModel.allToDos.observe(this, Observer { words ->
             // Update the cached copy of the words in the adapter.
-            words?.let { adapter.submitList(it) }
+            words?.let { adapter.differ.submitList(it) }
         })
 
 
@@ -50,8 +52,39 @@ class MainActivity : AppCompatActivity() {
             startActivityForResult(intent, newWordActivityRequestCode)
         }
 
-        val itemTouchHelper = ItemTouchHelper(simpleItemTouchCallback)
-        itemTouchHelper.attachToRecyclerView(recyclerView)
+
+        val itemTouchHelperCallback = object : ItemTouchHelper.SimpleCallback(
+            ItemTouchHelper.UP or ItemTouchHelper.DOWN,
+            ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
+        ) {
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            ): Boolean {
+                return true
+            }
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                val position = viewHolder.adapterPosition
+                val toDo = todoAdapter.differ.currentList[position]
+                toDoViewModel.deleteToDo(toDo)
+
+
+
+                Snackbar.make(view, "Successfully Deleted Article", Snackbar.LENGTH_SHORT).apply {
+                    setAction("Undo") {
+                        toDoViewModel.insert(toDo)
+                    }
+                    show()
+                }
+
+
+            }
+        }
+        ItemTouchHelper(itemTouchHelperCallback).apply {
+            attachToRecyclerView(recyclerView)
+        }
 
     }
 
@@ -81,7 +114,7 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId){
             R.id.close_app -> finish()
-            R.id.settings -> gotoPreferencesActivity()
+
             R.id.delete_all -> AlertDialog.Builder(this)
                 .setPositiveButton("Yes") { _, _ ->
                     toDoViewModel.deleteAllToDos()
@@ -95,26 +128,8 @@ class MainActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    var simpleItemTouchCallback: ItemTouchHelper.SimpleCallback =
-        object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
-            override fun onMove(
-                recyclerView: RecyclerView,
-                viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder
-            ): Boolean {
-
-                return false // true if moved, false otherwise
-            }
-
-            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, swipeDir: Int) {
-                //Remove swiped item from list and notify the RecyclerView
-
-                todoAdapter.notifyItemRemoved(viewHolder.layoutPosition)
-
-            }
-        }
 
 
-    private  fun gotoPreferencesActivity() {
-        startActivity(Intent(this,PreferencesActivity::class.java))
-    }
+
+
 }

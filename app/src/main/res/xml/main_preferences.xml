@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory
+        android:title="General">
+
+        <SwitchPreferenceCompat
+            android:title="Dark Theme"
+            android:summary="Battery Saver"
+            android:key="switch_preferences"/>
+    </PreferenceCategory>
+
+
+    <PreferenceCategory
+        android:title="Display"
+        android:key="expandable"
+        app:initialExpandedChildrenCount="1">
+
+        <SeekBarPreference
+            android:title="Brightness Level"
+            android:summary="0%"
+            android:key="seekBar_preference"/>
+
+        <Preference
+            android:key="intent_preference"
+            android:title="Wallpaper"
+            android:summary="Change Wallpaper"/>
+
+    </PreferenceCategory>
+
+
+
+
+
+</PreferenceScreen>
